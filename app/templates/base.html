@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" data-theme="{{ theme }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopKeeper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="{{ url_for('sales.dashboard') }}" class="brand-logo">
+                <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm2 4h12v10H6zm3 2v6h2v-6zm4 0v6h2v-6z"/></svg>
+                ShopKeeper
+            </a>
+        </div>
+        
+        {% if session.get('staff_id') %}
+        <div class="nav-links">
+            <a href="{{ url_for('sales.dashboard') }}" class="nav-link">{{ t('Dashboard') }}</a>
+            <a href="{{ url_for('stock.index') }}" class="nav-link">{{ t('Stock') }}</a>
+            {% if session.get('role') == 'owner' %}
+            <a href="{{ url_for('reports.index') }}" class="nav-link">{{ t('Reports') }}</a>
+            <a href="{{ url_for('reports.attendants') }}" class="nav-link">{{ t('Performance') }}</a>
+            <a href="{{ url_for('staff.index') }}" class="nav-link">{{ t('Staff') }}</a>
+            {% endif %}
+            <span class="nav-link" style="color: var(--secondary-color);">|</span>
+            <span class="nav-link" style="font-weight: normal; cursor: default;">
+                <strong>{{ session.get('shop_name') }}</strong> ({{ session.get('name') }})
+            </span>
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">{{ t('Logout') }}</a>
+        </div>
+        {% endif %}
+        
+        <div class="toggles">
+            <form action="{{ url_for('main.toggle_lang') }}" method="POST" style="display:inline;">
+                <select name="lang" id="lang-select" class="form-control" style="width:auto; padding:0.25rem;" onchange="this.form.submit()">
+                    <option value="en" {% if lang == 'en' %}selected{% endif %}>EN</option>
+                    <option value="fr" {% if lang == 'fr' %}selected{% endif %}>FR</option>
+                </select>
+            </form>
+            <form action="{{ url_for('main.toggle_theme') }}" method="POST" style="display:inline;">
+                <input type="hidden" name="theme" value="{{ 'light' if theme == 'dark' else 'dark' }}">
+                <button type="submit" id="theme-toggle" class="btn btn-secondary">
+                    {{ '☀️' if theme == 'dark' else '🌙' }}
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="card" style="margin-bottom: 1rem; border-left: 4px solid var(--{{ category }}-color);">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="brand-logo brand-logo-small">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm2 4h12v10H6zm3 2v6h2v-6zm4 0v6h2v-6z"/></svg>
+            ShopKeeper
+        </div>
+        <div>
+            {% if session.get('shop_name') %}
+                <span class="shop-name">{{ session.get('shop_name') }}</span> &bull; 
+            {% endif %}
+            {{ t('Inventory & sales tracking for neighbourhood shops') }}
+        </div>
+        <div style="margin-top: 0.5rem;">
+            &copy; 2026 ShopKeeper
+        </div>
+    </footer>
+    
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            const current = root.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+        
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            root.setAttribute('data-theme', savedTheme);
+        }
+    </script>
+</body>
+</html>

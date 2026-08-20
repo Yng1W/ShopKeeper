@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ t('Reports & Analytics') }}</h2>
+    <form method="GET" class="period-filter">
+        <label for="period">{{ t('Period:') }}</label>
+        <select name="period" id="period" class="form-control" onchange="this.form.submit()" style="width: auto; padding: 0.5rem 0.75rem;">
+            <option value="today" {{ 'selected' if period == 'today' else '' }}>{{ t('Today') }}</option>
+            <option value="week" {{ 'selected' if period == 'week' else '' }}>{{ t('This Week') }}</option>
+            <option value="all" {{ 'selected' if period == 'all' else '' }}>{{ t('All Time') }}</option>
+        </select>
+    </form>
+</div>
+
+<div class="grid" style="margin-bottom: 1.5rem;">
+    <div class="card stat-card">
+        <p class="stat-label">{{ t('Total Profit') }}</p>
+        <p class="stat-value tabular-nums">{{ profit }}</p>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h3 style="margin-bottom: 1rem;">{{ t('Best Sellers') }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-left">{{ t('Item') }}</th>
+                    <th class="text-right">{{ t('Quantity Sold') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item, total_sold in best_sellers %}
+                <tr>
+                    <td class="text-left">
+                        {{ item.name }}
+                        {% if loop.first and total_sold > 0 %}
+                            <span class="badge badge--best" style="margin-left: 0.5rem;">{{ t('Best Seller') }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right tabular-nums">{{ total_sold }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="2" class="text-left">{{ t('No data available.') }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 1rem;">{{ t('Worst Sellers') }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-left">{{ t('Item') }}</th>
+                    <th class="text-right">{{ t('Quantity Sold') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item, total_sold in worst_sellers %}
+                <tr>
+                    <td class="text-left">
+                        {{ item.name }}
+                        {% if loop.first and total_sold > 0 %}
+                            <span class="badge badge--worst" style="margin-left: 0.5rem;">{{ t('Worst Seller') }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right tabular-nums">{{ total_sold }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="2" class="text-left">{{ t('No data available.') }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

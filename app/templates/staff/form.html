@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 560px; margin: 0 auto;">
+    <h2 style="margin-bottom: 1.5rem;">{{ t('Edit Staff Member') if staff_member else t('Add Staff Member') }}</h2>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">{{ t('Full Name') }}</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ staff_member.name if staff_member else '' }}" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="username">{{ t('Username') }}</label>
+                <input type="text" id="username" name="username" class="form-control" value="{{ staff_member.username if staff_member else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">{{ t('Role') }}</label>
+                <select id="role" name="role" class="form-control" required>
+                    <option value="attendant" {{ 'selected' if staff_member and staff_member.role == 'attendant' else '' }}>{{ t('Attendant') }}</option>
+                    <option value="owner" {{ 'selected' if staff_member and staff_member.role == 'owner' else '' }}>{{ t('Owner') }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">{{ t('Password') }} <span class="form-hint">{{ t('(Leave blank to keep current password)') if staff_member else '' }}</span></label>
+            <input type="password" id="password" name="password" class="form-control" {{ 'required' if not staff_member else '' }}>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            {{ t('Save') }}
+        </button>
+    </form>
+</div>
+{% endblock %}

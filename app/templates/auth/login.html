@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-shell">
+    <div class="auth-hero">
+        <div class="brand-logo">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm2 4h12v10H6zm3 2v6h2v-6zm4 0v6h2v-6z"/></svg>
+            ShopKeeper
+        </div>
+
+        <svg class="illustration" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a shop counter with shelves and jars">
+            <rect x="10" y="30" width="300" height="10" rx="3" fill="var(--border-color)"/>
+            <rect x="30" y="45" width="40" height="55" rx="4" fill="var(--primary-color)" opacity="0.85"/>
+            <rect x="80" y="50" width="34" height="50" rx="4" fill="var(--success-color)" opacity="0.75"/>
+            <rect x="124" y="42" width="30" height="58" rx="4" fill="var(--warning-color)" opacity="0.8"/>
+            <rect x="164" y="48" width="36" height="52" rx="4" fill="var(--info-color)" opacity="0.7"/>
+            <rect x="210" y="40" width="32" height="60" rx="4" fill="var(--primary-color)" opacity="0.6"/>
+            <rect x="252" y="52" width="38" height="48" rx="4" fill="var(--success-color)" opacity="0.6"/>
+
+            <rect x="10" y="120" width="300" height="14" rx="4" fill="var(--secondary-color)" opacity="0.35"/>
+            <rect x="10" y="134" width="300" height="60" rx="10" fill="var(--card-bg)" stroke="var(--border-color)" stroke-width="2"/>
+
+            <circle cx="60" cy="164" r="16" fill="var(--primary-light)" stroke="var(--primary-color)" stroke-width="2"/>
+            <circle cx="60" cy="164" r="5" fill="var(--primary-color)"/>
+
+            <rect x="100" y="152" width="70" height="24" rx="12" fill="var(--primary-light)"/>
+            <rect x="112" y="160" width="46" height="8" rx="4" fill="var(--primary-color)" opacity="0.6"/>
+
+            <path d="M220 148 L246 148 L252 164 L214 164 Z" fill="var(--warning-color)" opacity="0.85"/>
+            <circle cx="233" cy="150" r="3" fill="var(--card-bg)"/>
+            <rect x="216" y="164" width="34" height="4" fill="var(--warning-color)" opacity="0.5"/>
+        </svg>
+
+        <h1>{{ t('Know your shop, down to the last item.') }}</h1>
+        <p>{{ t('Track stock, record every sale, and see your real profit the moment it happens — one simple system built for your shop counter.') }}</p>
+    </div>
+
+    <div class="auth-form-panel">
+        <h2>{{ t('Login to ShopKeeper') }}</h2>
+        <p class="auth-subtitle">{{ t('Welcome') }}</p>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">{{ t('Username') }}</label>
+                <input type="text" id="username" name="username" class="form-control" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">{{ t('Password') }}</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">{{ t('Login') }}</button>
+
+            <div class="auth-switch">
+                <span style="color: var(--muted-text);">{{ t("Don't have an account?") }}</span>
+                <a href="{{ url_for('auth.signup') }}">{{ t('Create a shop') }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

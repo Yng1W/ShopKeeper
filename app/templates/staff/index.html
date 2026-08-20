@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ t('Staff Management') }}</h2>
+    <a href="{{ url_for('staff.new') }}" class="btn btn-primary">{{ t('Add Staff') }}</a>
+</div>
+
+<div class="card">
+    {% if staff %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-left">{{ t('Name') }}</th>
+                <th class="text-left">{{ t('Username') }}</th>
+                <th class="text-left">{{ t('Role') }}</th>
+                <th class="text-left">{{ t('Status') }}</th>
+                <th class="text-left">{{ t('Actions') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff_member in staff %}
+            <tr>
+                <td class="text-left">{{ staff_member.name }}</td>
+                <td class="text-left">{{ staff_member.username }}</td>
+                <td class="text-left"><span class="badge {{ 'badge--owner' if staff_member.role == 'owner' else 'badge--attendant' }}">{{ t(staff_member.role|title) }}</span></td>
+                <td class="text-left">
+                    {% if staff_member.is_active %}
+                        <span class="badge badge--active">{{ t('Active') }}</span>
+                    {% else %}
+                        <span class="badge badge--inactive">{{ t('Inactive') }}</span>
+                    {% endif %}
+                </td>
+                <td class="text-left">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a href="{{ url_for('staff.edit', id=staff_member.staff_id) }}" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;">{{ t('Edit') }}</a>
+                        {% if staff_member.staff_id != session.get('staff_id') %}
+                        <form action="{{ url_for('staff.toggle_status', id=staff_member.staff_id) }}" method="POST" style="margin: 0;">
+                            <button type="submit" class="btn {{ 'btn-danger' if staff_member.is_active else 'btn-success' }}" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;">
+                                {{ t('Deactivate') if staff_member.is_active else t('Activate') }}
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="9" cy="8" r="3.5"/>
+            <path d="M2.5 19c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/>
+            <path d="M16.5 5.5a3.5 3.5 0 0 1 0 6.8"/>
+            <path d="M19.5 19c0-2.6-1.6-4.6-3.8-5.5"/>
+        </svg>
+        <p>{{ t('No staff members yet.') }}</p>
+        <a href="{{ url_for('staff.new') }}" class="btn btn-primary">{{ t('Add Staff') }}</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ t('Attendant Performance') }}</h2>
+    <form method="GET" class="period-filter">
+        <label for="period">{{ t('Period:') }}</label>
+        <select name="period" id="period" class="form-control" onchange="this.form.submit()" style="width: auto; padding: 0.5rem 0.75rem;">
+            <option value="today" {{ 'selected' if period == 'today' else '' }}>{{ t('Today') }}</option>
+            <option value="week" {{ 'selected' if period == 'week' else '' }}>{{ t('This Week') }}</option>
+            <option value="all" {{ 'selected' if period == 'all' else '' }}>{{ t('All Time') }}</option>
+        </select>
+    </form>
+</div>
+
+{% if performance %}
+<div class="grid" style="margin-bottom: 1.5rem;">
+    {% for perf in performance %}
+    <div class="card {% if loop.first and perf.profit > 0 %}border-best{% elif loop.last and loop.length > 1 %}border-worst{% endif %}">
+        <div class="perf-card-head">
+            <div class="perf-name-block">
+                <h3>{{ perf.staff.name }}</h3>
+                <span class="username">{{ perf.staff.username }}</span>
+            </div>
+            {% if loop.first and perf.profit > 0 %}
+                <span class="badge badge--best">{{ t('Best Performer') }}</span>
+            {% elif loop.last and loop.length > 1 %}
+                <span class="badge badge--worst">{{ t('Worst Performer') }}</span>
+            {% endif %}
+        </div>
+
+        <div class="perf-stats">
+            <div class="stat-block">
+                <span class="stat-block-label">{{ t('Total Sales') }}</span>
+                <span class="stat-block-value">{{ perf.sales_count }}</span>
+            </div>
+            <div class="stat-block">
+                <span class="stat-block-label">{{ t('Profit Generated') }}</span>
+                <span class="stat-block-value" style="color: var(--success-color);">{{ perf.profit }}</span>
+            </div>
+            <div class="stat-block">
+                <span class="stat-block-label">{{ t('Revenue') }}</span>
+                <span class="stat-block-value">{{ perf.revenue }}</span>
+            </div>
+        </div>
+
+        <details class="perf-details">
+            <summary>{{ t('View Recent Sales') }}</summary>
+            <div style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
+                {% if details.get(perf.staff.staff_id) %}
+                <table class="table" style="font-size: 0.875rem;">
+                    <thead>
+                        <tr>
+                            <th class="text-left">{{ t('Item') }}</th>
+                            <th class="text-right">{{ t('Qty') }}</th>
+                            <th class="text-right">{{ t('Amount') }}</th>
+                            <th class="text-left">{{ t('Date') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in details[perf.staff.staff_id][:10] %}
+                        <tr>
+                            <td class="text-left">{{ sale.item.name }}</td>
+                            <td class="text-right tabular-nums">{{ sale.quantity_sold }}</td>
+                            <td class="text-right tabular-nums">{{ sale.total_amount }}</td>
+                            <td class="text-left">{{ sale.timestamp.strftime('%Y-%m-%d') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="font-size: 0.875rem; color: var(--muted-text);">{{ t('No sales found.') }}</p>
+                {% endif %}
+            </div>
+        </details>
+    </div>
+    {% endfor %}
+</div>
+<p class="text-center" style="color: var(--muted-text); font-size: 0.875rem;">* {{ t('Ranked by profit generated') }}</p>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 19h16"/>
+            <rect x="6" y="11" width="3" height="8"/>
+            <rect x="11" y="7" width="3" height="12"/>
+            <rect x="16" y="14" width="3" height="5"/>
+        </svg>
+        <p>{{ t('No performance data yet.') }}</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
