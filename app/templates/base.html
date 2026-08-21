@@ -10,41 +10,45 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <a href="{{ url_for('sales.dashboard') }}" class="brand-logo">
-                <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm2 4h12v10H6zm3 2v6h2v-6zm4 0v6h2v-6z"/></svg>
-                ShopKeeper
-            </a>
+    <header class="site-header" style="text-align: center; padding: 1.5rem 1rem 0 1rem;">
+        <a href="{{ url_for('sales.dashboard') }}" class="brand-logo stacked" style="margin-bottom: 0.5rem;">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm2 4h12v10H6zm3 2v6h2v-6zm4 0v6h2v-6z"/></svg>
+            <span class="brand-name">ShopKeeper</span>
+        </a>
+        {% if session.get('staff_id') %}
+        <div style="color: var(--muted-text); font-size: 0.9rem;">
+            <strong>{{ session.get('shop_name') }}</strong> &mdash; {{ session.get('name') }}
         </div>
+        {% endif %}
+    </header>
+
+    <nav class="navbar">
         
         {% if session.get('staff_id') %}
         <div class="nav-links">
             <a href="{{ url_for('sales.dashboard') }}" class="nav-link">{{ t('Dashboard') }}</a>
             <a href="{{ url_for('stock.index') }}" class="nav-link">{{ t('Stock') }}</a>
+            <a href="{{ url_for('clients.index') }}" class="nav-link">{{ t('Clients') }}</a>
+            <a href="{{ url_for('invoices.index') }}" class="nav-link">{{ t('Invoices') }}</a>
             {% if session.get('role') == 'owner' %}
             <a href="{{ url_for('reports.index') }}" class="nav-link">{{ t('Reports') }}</a>
+            <a href="{{ url_for('reports.insights') }}" class="nav-link">{{ t('AI Insights') }}</a>
             <a href="{{ url_for('reports.attendants') }}" class="nav-link">{{ t('Performance') }}</a>
             <a href="{{ url_for('staff.index') }}" class="nav-link">{{ t('Staff') }}</a>
             {% endif %}
-            <span class="nav-link" style="color: var(--secondary-color);">|</span>
-            <span class="nav-link" style="font-weight: normal; cursor: default;">
-                <strong>{{ session.get('shop_name') }}</strong> ({{ session.get('name') }})
-            </span>
             <a href="{{ url_for('auth.logout') }}" class="nav-link">{{ t('Logout') }}</a>
         </div>
         {% endif %}
         
         <div class="toggles">
-            <form action="{{ url_for('main.toggle_lang') }}" method="POST" style="display:inline;">
-                <select name="lang" id="lang-select" class="form-control" style="width:auto; padding:0.25rem;" onchange="this.form.submit()">
-                    <option value="en" {% if lang == 'en' %}selected{% endif %}>EN</option>
-                    <option value="fr" {% if lang == 'fr' %}selected{% endif %}>FR</option>
-                </select>
+            <form action="{{ url_for('main.toggle_lang') }}" method="POST" class="lang-toggle" style="display:flex; align-items:center; margin:0; gap: 0.4rem;">
+                <button type="submit" name="lang" value="en" class="lang-btn {% if lang == 'en' %}active{% endif %}">ENG</button>
+                <span style="color: var(--border-color);">|</span>
+                <button type="submit" name="lang" value="fr" class="lang-btn {% if lang == 'fr' %}active{% endif %}">FRE</button>
             </form>
-            <form action="{{ url_for('main.toggle_theme') }}" method="POST" style="display:inline;">
+            <form action="{{ url_for('main.toggle_theme') }}" method="POST" style="display:flex; align-items:center; margin:0;">
                 <input type="hidden" name="theme" value="{{ 'light' if theme == 'dark' else 'dark' }}">
-                <button type="submit" id="theme-toggle" class="btn btn-secondary">
+                <button type="submit" id="theme-toggle" class="btn btn-secondary" style="padding: 0.35rem 0.6rem;">
                     {{ '☀️' if theme == 'dark' else '🌙' }}
                 </button>
             </form>

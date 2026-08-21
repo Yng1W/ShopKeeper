@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ t('Edit Client') }}</h2>
+</div>
+
+<div class="card">
+    <form method="POST">
+        <div class="form-group">
+            <label>{{ t('Name') }} *</label>
+            <input type="text" name="name" value="{{ client.name }}" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('Email') }} *</label>
+            <input type="email" name="email" value="{{ client.email }}" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('Phone') }}</label>
+            <input type="text" name="phone" value="{{ client.phone or '' }}" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('Address') }}</label>
+            <textarea name="address" class="form-control" rows="3">{{ client.address or '' }}</textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">{{ t('Save Changes') }}</button>
+    </form>
+</div>
+{% endblock %}

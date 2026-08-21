@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ t('Create Invoice') }}</h2>
+</div>
+
+<div class="card">
+    <form method="POST">
+        <div class="form-group">
+            <label>{{ t('Client') }} *</label>
+            <select name="client_id" required class="form-control">
+                <option value="">{{ t('Select Client') }}</option>
+                {% for client in clients %}
+                <option value="{{ client.client_id }}">{{ client.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('Due Date') }}</label>
+            <input type="date" name="due_date" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>{{ t('Un-invoiced Sales') }} *</label>
+            <div style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); padding: 10px; border-radius: var(--border-radius);">
+                {% for sale in un_invoiced_sales %}
+                <div style="margin-bottom: 10px;">
+                    <label>
+                        <input type="checkbox" name="sale_ids" value="{{ sale.sale_id }}">
+                        {{ sale.timestamp.strftime('%Y-%m-%d') }} - {{ sale.item.name }} (x{{ sale.quantity_sold }}) - {{ sale.client.name }} - {{ sale.total_amount }}
+                    </label>
+                </div>
+                {% else %}
+                <p>{{ t('No un-invoiced sales for clients found.') }}</p>
+                {% endfor %}
+            </div>
+            <small class="item-meta">{{ t('Select the sales to include in this invoice.') }}</small>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">{{ t('Create Invoice') }}</button>
+    </form>
+</div>
+{% endblock %}

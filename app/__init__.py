@@ -3,12 +3,16 @@ import os
 from flask import Flask, session, g
 from .config import Config
 from .models import db
+from flask_mail import Mail
+
+mail = Mail()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
     db.init_app(app)
+    mail.init_app(app)
 
     # Load translations
     def load_translations():
@@ -57,6 +61,12 @@ def create_app(config_class=Config):
     
     from .reports.routes import bp as reports_bp
     app.register_blueprint(reports_bp, url_prefix='/reports')
+
+    from .clients.routes import bp as clients_bp
+    app.register_blueprint(clients_bp, url_prefix='/clients')
+    
+    from .invoices.routes import bp as invoices_bp
+    app.register_blueprint(invoices_bp, url_prefix='/invoices')
 
     from .staff.routes import bp as staff_bp
     app.register_blueprint(staff_bp, url_prefix='/staff')

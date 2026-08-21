@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>{{ t('AI Sales Insights') }}</h2>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3>{{ t('AI Narrative Summary') }}</h3>
+    <div style="background-color: var(--card-bg); padding: 1.5rem; border-radius: var(--border-radius); border-left: 4px solid var(--accent-primary); font-size: 1.1rem; line-height: 1.6; margin-top: 1rem;">
+        {{ narrative | replace('\n', '<br>') | safe }}
+    </div>
+</div>
+
+<div class="card">
+    <h3>{{ t('Underlying Data') }}</h3>
+    
+    <div style="display: flex; gap: 20px; margin: 20px 0;">
+        <div class="stat-block">
+            <span class="stat-block-label">{{ t('Total Profit (This Month)') }}</span>
+            <span class="stat-block-value">{{ trend_data.total_profit_this_month }}</span>
+        </div>
+        <div class="stat-block">
+            <span class="stat-block-label">{{ t('Total Profit (Last Month)') }}</span>
+            <span class="stat-block-value">{{ trend_data.total_profit_last_month }}</span>
+        </div>
+    </div>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="border-bottom: 2px solid var(--border-color);">
+                <th style="text-align: left; padding: 10px;">{{ t('Item') }}</th>
+                <th style="text-align: right; padding: 10px;">{{ t('This Month (Units)') }}</th>
+                <th style="text-align: right; padding: 10px;">{{ t('Last Month (Units)') }}</th>
+                <th style="text-align: right; padding: 10px;">{{ t('% Change') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in trend_data.trend_data %}
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px;">{{ row.item_name }}</td>
+                <td style="text-align: right; padding: 10px;">{{ row.this_month_units }}</td>
+                <td style="text-align: right; padding: 10px;">{{ row.last_month_units }}</td>
+                <td style="text-align: right; padding: 10px; color: {% if row.pct_change > 0 %}green{% elif row.pct_change < 0 %}red{% else %}var(--text-color){% endif %};">
+                    {{ "%.1f"|format(row.pct_change) }}%
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

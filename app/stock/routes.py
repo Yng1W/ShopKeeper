@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, session, g
 from . import bp
 from ..models import db, Item
-from ..services import get_low_stock_items
+from ..services import get_low_stock_items, check_and_send_low_stock_email
 
 @bp.before_request
 def require_login():
@@ -51,6 +51,10 @@ def edit(id):
         item.quantity_in_stock = request.form.get('quantity_in_stock')
         item.reorder_threshold = request.form.get('reorder_threshold')
         db.session.commit()
+        
+        if int(item.quantity_in_stock) < int(item.reorder_threshold):
+            check_and_send_low_stock_email(item)
+            
         flash('Item updated successfully.', 'success')
         return redirect(url_for('stock.index'))
     return render_template('stock/form.html', item=item)

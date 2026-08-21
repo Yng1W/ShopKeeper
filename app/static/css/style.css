@@ -167,6 +167,20 @@ main.container {
   fill: currentColor;
   flex-shrink: 0;
 }
+.brand-logo.stacked {
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1;
+}
+.brand-logo.stacked svg {
+  width: 22px;
+  height: 22px;
+}
+.brand-logo.stacked .brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
 .brand-logo-large {
   font-size: 2.25rem;
   justify-content: center;
@@ -195,21 +209,30 @@ main.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.8rem 1.5rem;
   background: var(--nav-bg);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  flex-wrap: wrap;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  flex-wrap: nowrap;
   gap: 1rem;
+  width: min(1200px, calc(100% - 2rem));
+  margin: 1rem auto 2rem auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.navbar::-webkit-scrollbar {
+  display: none;
 }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  flex: 1 1 auto;
 }
 .nav-link {
   color: var(--text-color);
@@ -227,7 +250,30 @@ main.container {
 .toggles {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  flex: 0 0 auto;
+}
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted-text);
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--transition);
+  font-family: inherit;
+}
+.lang-btn:hover {
+  color: var(--primary-color);
+}
+.lang-btn.active {
+  color: var(--text-color);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }
 .container {
   width: min(1200px, 100%);

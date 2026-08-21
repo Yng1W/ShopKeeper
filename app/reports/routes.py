@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash, session, request
 from . import bp
-from ..services import get_profit_for_period, get_best_sellers, get_worst_sellers, get_attendant_performance, get_attendant_sales_details
+from ..services import get_profit_for_period, get_best_sellers, get_worst_sellers, get_attendant_performance, get_attendant_sales_details, get_sales_trend_data
+from ..ai_service import generate_sales_insights_narrative
 from datetime import datetime, timedelta
 
 @bp.before_request
@@ -42,3 +43,11 @@ def attendants():
     details = get_attendant_sales_details(shop_id, start_date, end_date)
     
     return render_template('reports/attendants.html', performance=performance, details=details, period=period)
+
+@bp.route('/insights')
+def insights():
+    shop_id = session.get('shop_id')
+    trend_data = get_sales_trend_data(shop_id)
+    narrative = generate_sales_insights_narrative(trend_data)
+    
+    return render_template('reports/insights.html', trend_data=trend_data, narrative=narrative)
