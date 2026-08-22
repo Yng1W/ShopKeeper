@@ -43,6 +43,16 @@
         <p>{{ invoice.client.address or '' }}</p>
     </div>
     
+    {% if qr_code_svg %}
+    <div style="margin-bottom: 30px; text-align: center;">
+        <h4>{{ t('Scan to Pay') }}</h4>
+        <div style="display: inline-block; padding: 10px; background: white; border-radius: 8px; margin-top: 10px;">
+            {{ qr_code_svg | safe }}
+        </div>
+        <p style="font-size: 0.9em; color: var(--muted-text); margin-top: 5px;">{{ t('Point your camera at the QR code to complete payment securely.') }}</p>
+    </div>
+    {% endif %}
+    
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
         <thead>
             <tr style="border-bottom: 2px solid var(--border-color);">
@@ -55,7 +65,7 @@
         <tbody>
             {% for line in invoice.lines %}
             <tr style="border-bottom: 1px solid var(--border-color);">
-                <td style="padding: 10px;">{{ line.sale.item.name }}</td>
+                <td style="padding: 10px;">{{ t(line.sale.item.name) }}</td>
                 <td style="text-align: right; padding: 10px;">{{ line.sale.quantity_sold }}</td>
                 <td style="text-align: right; padding: 10px;">{{ line.sale.price_at_sale }}</td>
                 <td style="text-align: right; padding: 10px;">{{ line.sale.total_amount }}</td>
@@ -121,10 +131,10 @@
         <div class="form-group">
             <label>{{ t('Payment Method') }} *</label>
             <select name="payment_method" required class="form-control">
-                <option value="cash">Cash</option>
-                <option value="mobile_money">Mobile Money</option>
-                <option value="bank_transfer">Bank Transfer</option>
-                <option value="card">Card</option>
+                <option value="cash">{{ t('Cash') }}</option>
+                <option value="mobile_money">{{ t('Mobile Money') }}</option>
+                <option value="bank_transfer">{{ t('Bank Transfer') }}</option>
+                <option value="card">{{ t('Card') }}</option>
             </select>
         </div>
         <div class="form-group">

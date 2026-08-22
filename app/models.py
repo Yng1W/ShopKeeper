@@ -89,6 +89,7 @@ class Invoice(db.Model):
     issue_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(20), nullable=False, default='unpaid') # unpaid, partially_paid, paid, overdue
+    payment_option = db.Column(db.String(50), nullable=False, default='standard')
     created_by = db.Column(db.Integer, db.ForeignKey('staff.staff_id', ondelete='RESTRICT'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

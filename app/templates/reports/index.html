@@ -3,14 +3,17 @@
 {% block content %}
 <div class="page-header">
     <h2>{{ t('Reports & Analytics') }}</h2>
-    <form method="GET" class="period-filter">
-        <label for="period">{{ t('Period:') }}</label>
-        <select name="period" id="period" class="form-control" onchange="this.form.submit()" style="width: auto; padding: 0.5rem 0.75rem;">
-            <option value="today" {{ 'selected' if period == 'today' else '' }}>{{ t('Today') }}</option>
-            <option value="week" {{ 'selected' if period == 'week' else '' }}>{{ t('This Week') }}</option>
-            <option value="all" {{ 'selected' if period == 'all' else '' }}>{{ t('All Time') }}</option>
-        </select>
-    </form>
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <form method="GET" class="period-filter" style="margin: 0;">
+            <label for="period">{{ t('Period:') }}</label>
+            <select name="period" id="period" class="form-control" onchange="this.form.submit()" style="width: auto; padding: 0.5rem 0.75rem; display: inline-block;">
+                <option value="today" {{ 'selected' if period == 'today' else '' }}>{{ t('Today') }}</option>
+                <option value="week" {{ 'selected' if period == 'week' else '' }}>{{ t('This Week') }}</option>
+                <option value="all" {{ 'selected' if period == 'all' else '' }}>{{ t('All Time') }}</option>
+            </select>
+        </form>
+        <a href="{{ url_for('reports.export_sales', period=period) }}" class="btn btn-secondary">{{ t('Export to Excel') }}</a>
+    </div>
 </div>
 
 <div class="grid" style="margin-bottom: 1.5rem;">
@@ -34,7 +37,7 @@
                 {% for item, total_sold in best_sellers %}
                 <tr>
                     <td class="text-left">
-                        {{ item.name }}
+                        {{ t(item.name) }}
                         {% if loop.first and total_sold > 0 %}
                             <span class="badge badge--best" style="margin-left: 0.5rem;">{{ t('Best Seller') }}</span>
                         {% endif %}
@@ -61,7 +64,7 @@
                 {% for item, total_sold in worst_sellers %}
                 <tr>
                     <td class="text-left">
-                        {{ item.name }}
+                        {{ t(item.name) }}
                         {% if loop.first and total_sold > 0 %}
                             <span class="badge badge--worst" style="margin-left: 0.5rem;">{{ t('Worst Seller') }}</span>
                         {% endif %}

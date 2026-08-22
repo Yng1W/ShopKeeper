@@ -60,7 +60,7 @@
                     <tbody>
                         {% for sale in details[perf.staff.staff_id][:10] %}
                         <tr>
-                            <td class="text-left">{{ sale.item.name }}</td>
+                            <td class="text-left">{{ t(sale.item.name) }}</td>
                             <td class="text-right tabular-nums">{{ sale.quantity_sold }}</td>
                             <td class="text-right tabular-nums">{{ sale.total_amount }}</td>
                             <td class="text-left">{{ sale.timestamp.strftime('%Y-%m-%d') }}</td>

@@ -60,11 +60,14 @@ def new():
         # generate invoice number
         invoice_num = f"INV-{datetime.now().year}-{uuid.uuid4().hex[:4].upper()}"
         
+        payment_option = request.form.get('payment_option', 'standard')
+        
         invoice = Invoice(
             shop_id=shop_id,
             client_id=client_id,
             invoice_number=invoice_num,
             due_date=due_date,
+            payment_option=payment_option,
             created_by=session.get('staff_id')
         )
         db.session.add(invoice)
@@ -102,12 +105,20 @@ def detail(invoice_id):
     now = datetime.now(UTC).replace(tzinfo=None)
     is_overdue = invoice.status in ['unpaid', 'partially_paid'] and invoice.due_date and invoice.due_date < now
     
+    qr_code_svg = None
+    if getattr(invoice, 'payment_option', 'standard') == 'qr_code' and balance > 0:
+        import segno
+        qr_url = f"https://resultcheker-orpin.vercel.app?invoice_id={invoice.invoice_number}&amount={balance}"
+        qr = segno.make(qr_url)
+        qr_code_svg = qr.svg_inline(scale=4)
+    
     return render_template('invoices/detail.html', 
                            invoice=invoice, 
                            total_amount=total_amount, 
                            paid_amount=paid_amount, 
                            balance=balance,
-                           is_overdue=is_overdue)
+                           is_overdue=is_overdue,
+                           qr_code_svg=qr_code_svg)
 
 @bp.route('/<int:invoice_id>/pay', methods=['POST'])
 def add_payment(invoice_id):

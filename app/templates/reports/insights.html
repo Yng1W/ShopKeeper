@@ -40,7 +40,7 @@
         <tbody>
             {% for row in trend_data.trend_data %}
             <tr style="border-bottom: 1px solid var(--border-color);">
-                <td style="padding: 10px;">{{ row.item_name }}</td>
+                <td style="padding: 10px;">{{ t(row.item_name) }}</td>
                 <td style="text-align: right; padding: 10px;">{{ row.this_month_units }}</td>
                 <td style="text-align: right; padding: 10px;">{{ row.last_month_units }}</td>
                 <td style="text-align: right; padding: 10px; color: {% if row.pct_change > 0 %}green{% elif row.pct_change < 0 %}red{% else %}var(--text-color){% endif %};">

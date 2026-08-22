@@ -13,7 +13,7 @@
     {% for item in items %}
     <div class="card">
         <div class="item-card-head">
-            <h3>{{ item.name }}</h3>
+            <h3>{{ t(item.name) }}</h3>
             {% if item.item_id in low_stock_ids %}
                 <span class="badge badge--lowstock">{{ t('Low Stock') }}</span>
             {% elif item.quantity_in_stock == 0 %}
@@ -23,7 +23,7 @@
             {% endif %}
         </div>
 
-        <p class="item-meta">{{ item.category }} &bull; {{ item.unit_type }}</p>
+        <p class="item-meta">{{ t(item.category) }} &bull; {{ t(item.unit_type) }}</p>
 
         <div class="item-stats">
             <div class="stat-block">

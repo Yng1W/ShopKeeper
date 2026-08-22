@@ -6,7 +6,12 @@
         <h2>{{ t('Welcome back') }}, {{ session.get('name') }}</h2>
         <p>{{ t("Here's what's happening in your shop.") }}</p>
     </div>
-    <a href="{{ url_for('sales.new') }}" class="btn btn-primary">{{ t('Record Sale') }}</a>
+    <div style="display: flex; gap: 10px;">
+        <a href="{{ url_for('sales.new') }}" class="btn btn-primary">{{ t('Record Sale') }}</a>
+        {% if session.get('role') == 'owner' %}
+        <a href="{{ url_for('reports.export_sales', period='all') }}" class="btn btn-secondary">{{ t('Export to Excel') }}</a>
+        {% endif %}
+    </div>
 </div>
 
 <div class="card">
@@ -25,7 +30,7 @@
         <tbody>
             {% for sale in recent_sales %}
             <tr>
-                <td class="text-left">{{ sale.item.name }}</td>
+                <td class="text-left">{{ t(sale.item.name) }}</td>
                 <td class="text-right tabular-nums">{{ sale.quantity_sold }}</td>
                 <td class="text-right tabular-nums">{{ sale.price_at_sale }}</td>
                 <td class="text-right tabular-nums"><strong>{{ sale.total_amount }}</strong></td>

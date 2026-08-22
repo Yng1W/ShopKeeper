@@ -11,7 +11,7 @@
                 <option value="">{{ t('Select Item') }}</option>
                 {% for item in items %}
                 <option value="{{ item.item_id }}">
-                    {{ item.name }} ({{ item.quantity_in_stock }} {{ item.unit_type }} {{ t('in stock') }}) - {{ item.selling_price }}
+                    {{ t(item.name) }} ({{ item.quantity_in_stock }} {{ t(item.unit_type) }} {{ t('in stock') }}) - {{ item.selling_price }}
                 </option>
                 {% endfor %}
             </select>
